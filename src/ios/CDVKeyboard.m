@@ -95,7 +95,8 @@
                                                                   queue:[NSOperationQueue mainQueue]
                                                              usingBlock:^(NSNotification* notification) {
                                                                  [weakSelf performSelector:@selector(shrinkViewKeyboardWillChangeFrame:) withObject:notification afterDelay:0];
-                                                                 CGRect screen = [[UIScreen mainScreen] bounds];
+                                                                 // NOTE: to handle split screen correctly, the application's window bounds must be used as opposed to the screen's bounds.
+                                                                 CGRect screen = [[[[UIApplication sharedApplication] delegate] window] bounds];
                                                                  CGRect keyboard = ((NSValue*)notification.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
                                                                  CGRect intersection = CGRectIntersection(screen, keyboard);
                                                                  CGFloat height = MIN(intersection.size.width, intersection.size.height);
@@ -173,7 +174,8 @@ static IMP WKOriginalImp;
 
     self.webView.scrollView.scrollEnabled = YES;
 
-    CGRect screen = [[UIScreen mainScreen] bounds];
+    // NOTE: to handle split screen correctly, the application's window bounds must be used as opposed to the screen's bounds.
+    CGRect screen = [[[[UIApplication sharedApplication] delegate] window] bounds];
     CGRect statusBar = [[UIApplication sharedApplication] statusBarFrame];
     CGRect keyboard = ((NSValue*)notif.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
 
